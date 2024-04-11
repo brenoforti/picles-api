@@ -23,7 +23,7 @@ export class Shelter {
     createdAt: Date;
 
     @Prop({ required: true })
-    updateAt: Date;
+    updatedAt: Date;
 }
 
 export const ShelterSchema = SchemaFactory.createForClass(Shelter);
