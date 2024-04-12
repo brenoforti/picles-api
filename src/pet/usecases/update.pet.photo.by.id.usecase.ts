@@ -21,18 +21,20 @@ export default class UpdatePetPhotoByIdUseCase implements IUseCase<UpdatePetPhot
     ){}
 
     async run(input: UpdatePetPhotoByIdUseCaseInput): Promise<UpdatePetPhotoByIdUseCaseOutput> {
-        const pet = await this.getPetById(input.id)
+        let pet = await this.getPetById(input.id)
 
         if(!pet) {
             throw new PetNotFoundError()
         }
 
         await this.petRepository.updateById({
-            _id: input.id,
-            photo: input.photoPath,
-        });
+            ...input,
+            _id: input.id
+        })
 
-        const photo = await this.fileService.readFile(input.photoPath);
+        pet = await this.getPetById(input.id);
+
+        const petPhoto = !!pet.photo ? (await this.fileService.readFile(pet.photo)).toString ('base64') : null;
 
         return new UpdatePetPhotoByIdUseCaseOutput({
             id: pet._id,
@@ -41,7 +43,7 @@ export default class UpdatePetPhotoByIdUseCase implements IUseCase<UpdatePetPhot
             size: pet.size,
             gender: pet.gender,
             bio: pet.bio,
-            photo: photo.toString('base64'),
+            photo: petPhoto,
             createdAt: pet.createdAt,
             updatedAt: pet.updatedAt
         })

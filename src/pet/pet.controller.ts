@@ -79,10 +79,14 @@ export class PetController {
         @UploadedFile() photo: Express.Multer.File,
         @Param('id') id: string,
     ): Promise<UpdatePetPhotoByIdUseCaseOutput>{
-        const useCaseInput = new UpdatePetPhotoByIdUseCaseInput({
-            id,
-            photoPath: photo.path
-        })
-        return await this.updatePetPhotoByIdUseCase.run(useCaseInput)
+        try {
+            const useCaseInput = new UpdatePetPhotoByIdUseCaseInput({
+                id,
+                photoPath: photo.path
+            })
+            return await this.updatePetPhotoByIdUseCase.run(useCaseInput)
+        } catch (error) {
+            throw new BadRequestException(JSON.parse(error.message))
+        }
     }
 }
