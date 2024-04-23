@@ -7,7 +7,7 @@ import IPetRepository from "../interfaces/pet.repository.interface";
 import PetNotFoundError from "src/domain/errors/pet.not.found.error";
 import { Pet } from "../schemas/pet.schema";
 import AppTokens from "src/app.tokens";
-import IFileService from "src/file.service.interface";
+import IFileService from "src/interface/file.service.interface";
 
 @Injectable()
 export default class UpdatePetPhotoByIdUseCase implements IUseCase<UpdatePetPhotoByIdUseCaseInput, UpdatePetPhotoByIdUseCaseOutput>{
@@ -28,13 +28,13 @@ export default class UpdatePetPhotoByIdUseCase implements IUseCase<UpdatePetPhot
         }
 
         await this.petRepository.updateById({
-            ...input,
-            _id: input.id
+            _id: input.id,
+            photo: input.photoPath
         })
 
         pet = await this.getPetById(input.id);
 
-        const petPhoto = !!pet.photo ? (await this.fileService.readFile(pet.photo)).toString ('base64') : null;
+        const photo = await this.fileService.readFileInBase64(input.photoPath);
 
         return new UpdatePetPhotoByIdUseCaseOutput({
             id: pet._id,
@@ -43,10 +43,10 @@ export default class UpdatePetPhotoByIdUseCase implements IUseCase<UpdatePetPhot
             size: pet.size,
             gender: pet.gender,
             bio: pet.bio,
-            photo: petPhoto,
+            photo: photo,
             createdAt: pet.createdAt,
             updatedAt: pet.updatedAt
-        })
+        });
     }
 
     private async getPetById(id: string): Promise<Pet> {

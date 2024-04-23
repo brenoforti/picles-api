@@ -7,7 +7,7 @@ import GetPetByIdUseCaseInput from "./dtos/get.pet.by.id.usecase.input";
 import GetPetByIdUseCaseOutput from "./dtos/get.pet.by.id.usecase.output";
 import PetNotFoundError from "src/domain/errors/pet.not.found.error";
 import AppTokens from "src/app.tokens";
-import IFileService from "src/file.service.interface";
+import IFileService from "src/interface/file.service.interface";
 
 @Injectable()
 export default class GetPetByIdUseCase implements IUseCase<GetPetByIdUseCaseInput, GetPetByIdUseCaseOutput> {
@@ -27,7 +27,7 @@ export default class GetPetByIdUseCase implements IUseCase<GetPetByIdUseCaseInpu
             throw new PetNotFoundError()
         }
 
-        const petPhoto = !!pet.photo ? (await this.fileService.readFile(pet.photo)).toString ('base64') : null;
+        const petPhoto = !!pet.photo ? (await this.fileService.readFileInBase64(pet.photo)): null;
 
         return new GetPetByIdUseCaseOutput({
             id: pet._id,
