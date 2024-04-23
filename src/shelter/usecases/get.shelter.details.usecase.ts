@@ -4,8 +4,7 @@ import ShelterTokens from "../shelter.tokens";
 import IShelterRepository from "../interfaces/shelter.repository.interface";
 import { Inject } from "@nestjs/common";
 
-export default class GetShelterDetailsUseCase
-    implements IUseCase<null, GetShelterDetailsUseCaseOutput> {
+export default class GetShelterDetailsUseCase implements IUseCase<null, GetShelterDetailsUseCaseOutput> {
 
     constructor(
         @Inject(ShelterTokens.shelterRepository)
@@ -15,10 +14,10 @@ export default class GetShelterDetailsUseCase
     async run(): Promise<GetShelterDetailsUseCaseOutput> {
         const shelter = await this.shelterRepository.get();
         return new GetShelterDetailsUseCaseOutput({
-        shelterName: shelter.name,
-        shelterEmail: shelter.email,
-        shelterPhone: shelter.phone,
-        shelterWhatsApp: shelter.whatsApp,
+        name: shelter.name,
+        email: shelter.email,
+        phone: shelter.phone,
+        whatsApp: shelter.whatsApp,
         createdAt: shelter.createdAt,
         updatedAt: shelter.updatedAt
         });
