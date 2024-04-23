@@ -30,7 +30,7 @@ export default class PetRepository implements IPetRepository {
         }
 
         if (input.gender) {
-            query = query.find({ size: input.gender});
+            query = query.find({ gender: input.gender});
         }
 
         const totalQuery = query.clone().countDocuments();
