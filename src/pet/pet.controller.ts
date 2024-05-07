@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Inject, Param, Post, Put, Patch, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Inject, Param, Post, Put, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import PetTokens from './pet.tokens';
 import { IUseCase } from 'src/domain/iusecase.interface';
 import CreatePetControllerInput from './dtos/create.pet.controller.input';
@@ -99,7 +99,7 @@ export class PetController {
         }
     }
 
-    @Patch(':id/photo')
+    @Put(':id/photo')
     @UseInterceptors(FileInterceptor('photo', multerConfig))
     async updatePhoto(
         @UploadedFile() photo: Express.Multer.File,
